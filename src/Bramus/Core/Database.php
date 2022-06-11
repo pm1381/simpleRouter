@@ -17,4 +17,9 @@ class Database
             }
         }
     }
+
+    public function connectionStatus()
+    {
+        return self::$connection;
+    }
 }

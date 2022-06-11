@@ -3,7 +3,7 @@
 namespace Bramus\Model;
 
 class Calculate {
-    public function meterCalculation($amount, $from, $to)
+    public function meterCalculation(float $amount, $from, $to)
     {
         $data = [];
         $data['answer'] = $from * (1 / ($to)) * $amount;

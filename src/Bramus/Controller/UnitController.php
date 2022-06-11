@@ -24,6 +24,7 @@ class UnitController {
         $to = $_POST['to'];
         $error = [];        
         $where['name'] = $from;
+        
         $fromResult = $this->makeConvertQuery($where);
         if (count($fromResult) > 0){
             $where['name'] = $to;

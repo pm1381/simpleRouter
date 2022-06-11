@@ -4,3 +4,5 @@
 tests-report/
 /.idea/
 .php_cs.cache
+*.result.cache
+

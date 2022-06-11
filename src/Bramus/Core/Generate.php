@@ -9,6 +9,7 @@ use function PHPSTORM_META\type;
 class Generate extends Database
 {
     private $table;
+    private $queryString;
     private $row = [];
     private $where = [];
     private $limit = 0;
@@ -75,6 +76,7 @@ class Generate extends Database
         $cols = $this->generateInsertRows($data);
         $bind = $this->generateBinds($data);
         $query = self::$connection->prepare("INSERT INTO " . '`' . $this->table . '`' . $cols ." VALUES " . $bind);
+        $this->setQuery("INSERT INTO " . '`' . $this->table . '`' . $cols ." VALUES " . $bind);
         $this->insertBindParams($query, $data);
         try {
             $query->execute();
@@ -193,6 +195,7 @@ class Generate extends Database
         $where = $this->generateWhere($this->where);
         $set = $this->generateUpdateSet($data);
         $query = self::$connection->prepare("UPDATE " . '`' . $this->table .'` '.  $set . $where);
+        $this->setQuery("UPDATE " . '`' . $this->table .'` '.  $set . $where);
         $this->insertBindParams($query, $data);
         $this->insertBindParams($query, $this->where);
         try {
@@ -208,6 +211,7 @@ class Generate extends Database
     {
         $where = $this->generateWhere($data);
         $query = self::$connection->prepare("DELETE FROM " . '`' .  $this->table . '`' . $where);
+        $this->setQuery("DELETE FROM " . '`' .  $this->table . '`' . $where);
         $this->insertBindParams($query, $data);
         try {
             $query->execute();
@@ -218,11 +222,22 @@ class Generate extends Database
         }
     }
 
+    public function setQuery($query)
+    {
+        $this->queryString = $query;
+    }
+
+    public function getQuery()
+    {
+        return $this->queryString;
+    }
+
     public function select()
     {
         $row = $this->generateRows($this->row);
         $where = $this->generateWhere($this->where);
         $query = self::$connection->prepare("SELECT ". $row ." FROM " . '`' . $this->table . '`' . $where);
+        $this->setQuery("SELECT ". $row ." FROM " . '`' . $this->table . '`' . $where);
         $this->insertBindParams($query, $this->where);
         try {
             $query->execute();
